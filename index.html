@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		<title>Shopping List</title>
+
+		<meta name="description" content="Your personal shopping list" />
+		<meta name="robots" content="index, follow" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<meta name="apple-mobile-web-app-title" content="Shopping List" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-touch-fullscreen" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+		<link rel="icon" href="icon.png" type="image/png" />
+		<link rel="apple-touch-icon" href="icon.png">
+		<link rel="manifest" href="site.webmanifest">
+		<meta name="theme-color" content="#c1ac83">
+
+		<meta property="og:image" content="og-image.jpg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="600" />
+
+		<script>document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, 'js');</script>
+
+		<style>
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				
+				color: #222222;
+				font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+				font-size: 1em;
+				line-height: 1.625em;
+			}
+
+			html {
+				height: 100%;
+			}
+
+			body {
+				min-height: 100%;
+				padding: 5px;
+			}
+
+			a,
+			a:link,
+			a:visited {
+				color: #222222;
+				text-decoration: underline;
+			}
+
+			a:focus,
+			a:hover,
+			a:active {
+				color: #444444;
+			}
+
+			footer {
+				max-width: 450px;
+				margin: 0 auto;
+				padding: 0.75em 0.5em 2em;
+
+				font-size: 0.8em;
+				text-align: center;
+			}
+
+			footer button {
+				background: transparent;
+				border: 1px solid black;
+			}
+
+			footer textarea[hidden] {
+				display: none;
+			}
+
+			footer textarea {
+				display: block;
+				width: 100%;
+				min-height: 200px;
+				margin: 0 auto;
+			}
+
+			.empty {
+				padding: 1em 0;
+
+				font-size: 0.95em;
+				line-height: 0.95em;
+				letter-spacing: -1px;
+				text-align: center;
+				text-transform: uppercase;
+				text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.45);
+				word-break: break-word;
+			}
+
+			/** Theme "Antique" */
+
+			.theme-antique main {
+				max-width: 450px;
+				margin: 0 auto;
+				padding: 0.5em 0.25em;
+
+				background: rgb(195,143,92);
+				background: linear-gradient(320deg, rgba(195,143,92,1) 0%, rgba(177,155,111,1) 43%, rgba(182,155,103,0.75) 100%); 
+
+				border-radius: 5px;
+				box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+			}
+
+			.theme-antique main ul {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+
+				list-style: none;
+
+				font-size: 0.9em;
+			}
+
+			.theme-antique .left {
+				position: relative;
+
+				width: 51%;
+				margin-left: 0;
+				float: left;
+			}
+
+			.theme-antique .right {
+				position: relative;
+
+				width: 50%;
+				margin-left: 50%;
+
+				text-align: right;
+			}
+
+			.theme-antique .item {
+				display: block;
+			}
+
+			.theme-antique .item [type="checkbox"] {
+				position: absolute;
+
+				display: none;
+				width: 0;
+				height: 0;
+
+				appearance: none;
+				opacity: 0;
+			}
+
+			.theme-antique .item__switch {
+				position: relative;
+
+				display: inline-block;
+				vertical-align: middle;
+				width: 5.75em;
+				height: 1em;
+
+				font-size: 0.85em;
+			}
+
+			.theme-antique .item__switch::before {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+
+				content: '';
+				display: block;
+				width: 2.5em;
+				height: 0.75em;
+
+				background: #666666;
+				box-shadow: inset 0 3px 7px #222222;
+				transform: translateX(-50%) translateY(-50%);
+			}
+
+			.theme-antique .item [type="checkbox"] + .item__switch svg {
+				position: absolute;
+				left: 50%;
+
+				display: block;
+				width: 2.875em;
+				height: 1em;
+
+				fill: #cc473e;
+				filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
+
+				transform: rotate3d(0, 1, 0, 0deg);
+				transform-origin: 0 0;
+				transition: transform 0.5s ease, fill 0.5s ease;
+			}
+
+			.theme-antique .item [type="checkbox"]:checked + .item__switch svg {
+				fill: #844d51;
+				transform: rotate3d(0, 1, 0, 180deg);
+			}
+
+			.theme-antique .right [type="checkbox"] + .item__switch svg {
+				fill: #cc473e;
+				transform: rotate3d(0, 1, 0, 180deg) rotate(0deg);
+			}
+
+			.theme-antique .right [type="checkbox"]:checked + .item__switch svg {
+				fill: #844d51;
+				transform: rotate3d(0, 1, 0, 0deg) rotate(0deg);
+			}
+
+			.theme-antique .item__text {
+				display: inline-block;
+				vertical-align: middle;
+				width: 75px;
+				min-height: 12px;
+				margin-left: -2px;
+
+				font-size: 0.95em;
+				line-height: 0.95em;
+				letter-spacing: -1px;
+				text-transform: uppercase;
+				text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.45);
+				word-break: break-word;
+			}
+
+			.theme-antique .right .item__text {
+				margin-left: 0;
+				margin-right: -2px;
+
+				text-align: left;
+			}
+
+			@media screen and (min-width: 340px) {
+				.theme-antique .item__text {
+					width: 85px;
+				}
+			}
+
+			@media screen and (min-width: 400px) {
+				.theme-antique main ul {
+					font-size: 1.2em;
+				}
+
+				.theme-antique .item {
+					margin: 0 0 0.25em;
+				}
+
+				.theme-antique .item__text {
+					width: 85px;
+				}
+			}
+
+			@media screen and (min-width: 425px) {
+				.theme-antique .item__text {
+					width: 100px;
+				}
+			}
+
+			@media screen and (min-width: 455px) {
+				.theme-antique .item__text {
+					width: 118px;
+				}
+			}
+
+			/** Theme "Modern" */
+
+			.theme-modern main {
+				max-width: 450px;
+				margin: 0 auto;
+				padding: 0.75rem;
+
+				background-color: #f9f9f9;
+				box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+
+				color: #2e343b;
+				font-size: 16px;
+			}
+
+			@media screen and (min-width: 400px) {
+				.theme-modern main {
+					font-size: 20px;
+				}
+			}
+
+			.theme-modern ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+
+				column-count: 2;
+    			column-gap: 20px;
+			}
+
+			.theme-modern ul li {
+				position: relative;
+				min-height: 2em;
+
+				display: inline-flex;
+				width: 100%;
+				height: 2rem;
+				overflow: hidden;
+				flex-direction: row;
+				align-items: center;
+
+
+				margin: 0.25rem 0;
+			}
+
+			.theme-modern [type=checkbox] {
+				position: absolute;
+
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+
+			.theme-modern label {
+				position: relative;
+
+				display: inline-block;
+				min-width: 3em;
+				height: 1.5em;
+				vertical-align: baseline;
+				overflow: hidden;
+
+				background-color: #ef4836;
+				border-radius: 100px;
+				box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.15);
+				cursor: pointer;
+				transition: background-color 0.3s;
+
+				text-indent: -9999px;
+			}
+
+			.theme-modern .left label + span {
+				padding-left: 0.5em;
+				box-sizing: border-box;
+			}
+
+			.theme-modern .right {
+				flex-direction: row-reverse;
+				justify-content: space-between;
+			}
+
+			.theme-modern label::after {
+				position: absolute;
+				top: 2px;
+				left: 2px;
+
+				content: '';
+				width: calc(100% / 2 - 4px);
+				height: calc(100% - 4px);
+
+				background: #ffffff;
+				border-radius: 90px;
+				box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+				transition: left 0.3s, transform 0.3s;
+			}
+
+			.theme-modern input:checked + label {
+				/*background: #03a678;*/
+				/*background-color: #438e79;*/
+				background-color: #8dc8b7;
+			}
+
+			.theme-modern input:checked + label:after {
+				left: calc(100% - 2px);
+				transform: translateX(-100%);
+
+				/*content: '\2714';*/
+
+				/*color: #03a678;
+				font-size: 0.75em;
+				line-height: 1.75;
+				text-indent: 0;
+				text-align: center;*/
+			}
+
+			.theme-modern input:checked + label + span {
+				text-decoration: line-through;
+				/*text-decoration-thickness: 2px;*/
+			}
+
+			.theme-modern input:focus + label {
+				outline: 2px dotted #222222;
+				outline-offset: 1px;
+			}
+
+			.theme-modern input + label + span {
+				width: calc(100% - 3em);
+
+				font-size: 1em;
+				line-height: 1;
+				text-shadow: 1px 1px #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<ul class="js-list">
+			</ul>
+		</main>
+
+		<footer>
+			<button class="js-edit">EDIT</button> &bull; Made<!-- without much &hearts;--> by <a href="https://www.bhdzllr.com/">bhdzllr</a> | <a href="https://www.bhdzllr.com/legal.html">Legal</a><br />
+			Themes: <button class="js-switch-theme">Antique</button> &bull; <button class="js-switch-theme">Modern</button>
+		</footer>
+
+		<script type="text/javascript">
+			(function () {
+
+				var themePrefix = 'theme-';
+				var listData = [
+					'Baby Food',
+					'Bacon',
+					'Bread',
+					'Butter',
+					'Cake',
+					'Catsup',
+					'Cereal',
+					'Cheese',
+					'Cocoa',
+					'Cookies',
+					'Coffee',
+					'Cream',
+					'Delicatess',
+					'Eggs',
+					'Fish',
+					'Flour',
+					'Frozen Food',
+					'Fruit',
+					'Jams',
+					'Juices',
+					'Matches',
+					'Meats',
+					'Milk',
+					'Mustard',
+					'Noodles',
+					'Oil',
+					'Onions',
+					'Pepper',
+					'Poultry',
+					'Potatoes',
+					'Rice',
+					'Salt',
+					'Soap',
+					'Soups',
+					'Spaghetti',
+					'Spices',
+					'Sugar',
+					'Tea',
+					'Vegetable',
+					'Vinegar',
+				];
+				var listUnchecked = [];
+				var listTheme = themePrefix + 'antique';
+				var list = document.querySelector('.js-list');
+
+				if (!localStorage.getItem('list-data')) {
+					localStorage.setItem('list-data', JSON.stringify(listData));
+				} else {
+					listData = JSON.parse(localStorage.getItem('list-data'));
+				}
+
+				if (localStorage.getItem('list-unchecked')) {
+					listUnchecked = JSON.parse(localStorage.getItem('list-unchecked'));
+				}
+
+				if (localStorage.getItem('list-theme')) {
+					listTheme = localStorage.getItem('list-theme');
+				}
+
+				var renderers = {
+					'theme-antique': function () {
+						var items = '';
+						var breakPoint = listData.length / 2;
+
+						list.innerHTML = '';
+
+						if (listData.length == 1 && !listData[0].trim()) {
+							items += `<li class="empty">No items on the list</li>`;
+							list.innerHTML = items;
+							return;
+						}
+
+						for (var i = 0; i < listData.length; i++) {
+							var itemName = listData[i].trim();
+							var checked = (listUnchecked.indexOf(listData[i]) > -1) ? '' : 'checked';
+
+							if (i < breakPoint) {
+								items += `
+									<li class="left">
+										<label for="${listData[i]}-${i}" class="item">
+											<input type="checkbox" id="${listData[i]}-${i}" name="${listData[i]}" value="${listData[i]}" ${checked} class="js-checkbox" />
+											<span class="item__switch">
+												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="46px" height="16px" viewBox="0 0 46 16">
+													<path d="M17.512,0c0.022,0,0.044,0.001,0.066,0.004l27.988,3.75C45.814,3.788,46,4,46,4.25v7.5c0,0.25-0.186,0.462-0.434,0.496
+														l-27.988,3.75c-0.145,0.02-0.287-0.024-0.396-0.119c-0.109-0.095-0.171-0.232-0.171-0.376v-3.538H0.5c-0.276,0-0.5-0.224-0.5-0.5
+														V4.539c0-0.276,0.224-0.5,0.5-0.5h16.512V0.5c0-0.144,0.062-0.281,0.171-0.376C17.274,0.043,17.392,0,17.512,0z"
+													/>
+												</svg>
+											</span>
+											<span class="item__text">${listData[i]}</span>
+										</label>
+									</li>
+								`;
+							} else {
+								items += `
+									<li class="right">
+										<label for="${listData[i]}-${i}" class="item">
+											<span class="item__text">${listData[i]}</span>
+											<input type="checkbox" id="${listData[i]}-${i}" name="${listData[i]}" value="${listData[i]}" ${checked} class="js-checkbox" />
+											<span class="item__switch">
+												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="46px" height="16px" viewBox="0 0 46 16">
+													<path d="M17.512,0c0.022,0,0.044,0.001,0.066,0.004l27.988,3.75C45.814,3.788,46,4,46,4.25v7.5c0,0.25-0.186,0.462-0.434,0.496
+														l-27.988,3.75c-0.145,0.02-0.287-0.024-0.396-0.119c-0.109-0.095-0.171-0.232-0.171-0.376v-3.538H0.5c-0.276,0-0.5-0.224-0.5-0.5
+														V4.539c0-0.276,0.224-0.5,0.5-0.5h16.512V0.5c0-0.144,0.062-0.281,0.171-0.376C17.274,0.043,17.392,0,17.512,0z"
+													/>
+												</svg>
+											</span>
+										</label>
+									</li>
+								`;
+							}
+						}
+
+						list.innerHTML = items;
+					},
+					'theme-modern': function () {
+						var items = '';
+						var breakPoint = listData.length / 2;
+
+						list.innerHTML = '<li>Modern</li>';
+
+						if (listData.length == 1 && !listData[0].trim()) {
+							items += `<li class="empty">No items on the list</li>`;
+							list.innerHTML = items;
+							return;
+						}
+
+						for (var i = 0; i < listData.length; i++) {
+							var itemName = listData[i].trim();
+							var checked = (listUnchecked.indexOf(listData[i]) > -1) ? '' : 'checked';
+							
+							// if (i == 0) items += `<div class="col">`;
+
+							items += `
+								<li class="${(i < breakPoint) ? 'left' : 'right'}">
+									<input type="checkbox" id="${listData[i]}-${i}" name="${listData[i]}" value="${listData[i]}" ${checked} class="js-checkbox" />
+									<label for="${listData[i]}-${i}">${listData[i]}</label>
+									<span class="js-pseudo-label">${listData[i]}</span>	
+								</li>
+							`;
+
+							// if (i == breakPoint-1) items += `</div><div class="col">`;
+							// if (i == listData.length-1) items += `</div>`;
+						}
+
+						list.innerHTML = items;
+
+						const labels = document.querySelectorAll('.js-pseudo-label');
+						for (let i = 0; i < labels.length; i++) {
+							labels[i].addEventListener('click', function () {
+								this.previousElementSibling.click();
+							});
+						}
+					},
+				}
+				
+				render();
+
+				function initCheckboxListeners() {
+					var checkboxes = document.querySelectorAll('.js-checkbox');
+
+					for (var i = 0; i < checkboxes.length; i++) {
+						checkboxes[i].addEventListener('change', function (e) {
+							var itemIndex = listUnchecked.indexOf(e.target.value);
+
+							if (e.target.checked && itemIndex > -1) {
+								listUnchecked.splice(itemIndex, 1);
+							}
+
+							if (!e.target.checked && itemIndex == -1) {
+								listUnchecked.push(e.target.value);
+							}
+
+							localStorage.setItem('list-unchecked', JSON.stringify(listUnchecked));
+						});
+					}
+				}
+
+				var isEditing = false;
+				var editButton = document.querySelector('.js-edit');
+				var editButtonText = editButton.textContent;
+				var editArea = document.createElement('textarea');
+
+				editArea.hidden = true;
+				editButton.parentNode.insertBefore(editArea, editButton);
+
+				editButton.addEventListener('click', function () {
+					isEditing = !isEditing;
+
+					if (isEditing) {
+						editArea.value = listData.join('\n');
+						editArea.hidden = false;
+
+						this.textContent = 'Update';
+					} else {
+						editArea.hidden = true;
+						listData = editArea.value.replace(/(<([^>]+)>)/gi, '').split('\n');
+
+						localStorage.setItem('list-data', JSON.stringify(listData));
+
+						this.textContent = editButtonText;
+
+						render();
+					}
+				});
+
+				var themeButtons = document.querySelectorAll('.js-switch-theme');
+				for (var i = 0; i < themeButtons.length; i++) {
+					themeButtons[i].addEventListener('click', function () {
+						listTheme = themePrefix + this.textContent.toLowerCase();
+						localStorage.setItem('list-theme', listTheme);
+						render();
+					});
+				}
+
+				function render() {
+					var classList = document.documentElement.className.split(' ');
+
+					for (var i = 0; i < classList.length; i++) {
+						if (classList[i].indexOf(themePrefix) > -1) {
+							document.documentElement.classList.remove(classList[i]);
+						}
+					}
+
+					document.documentElement.classList.add(listTheme);
+
+					renderers[listTheme]();
+
+					initCheckboxListeners();
+				}
+
+			})();
+		</script>
+	</body>
+</html>
