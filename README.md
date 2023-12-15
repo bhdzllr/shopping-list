@@ -6,4 +6,4 @@ An antique pocket shopping list is a board with fixed items/groceries and switch
 
 I liked the idea so I built it as web app very quickly just for fun.
 
-[Shopping List]https://bhdzllr.github.io/shopping-list/)
+[Shopping List](https://bhdzllr.github.io/shopping-list/)
